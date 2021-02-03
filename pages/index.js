@@ -1,65 +1,83 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import axios from "axios";
+import React, { useState, useEffect } from "react";
 
-export default function Home() {
+function Home() {
+  const [comps, setComps] = useState([]);
+
+  function loadComputers() {
+    try {
+      axios
+        .get("/api/v1/enabled")
+        .then((result) => {
+          console.log(result);
+          if (result.status === 200) {
+            setComps(result.data.computers);
+          }
+        })
+        .error((err) => {
+          setComps([]);
+          console.error(err.message);
+        });
+    } catch (e) {
+      setComps([]);
+    }
+  }
+
+  function deleteComputer({ name, mac }) {
+    if (confirm(`${name} wirklich löschen?`)) {
+      axios
+        .delete(`/api/v1/delete/${mac}`)
+        .then((result) => {
+          console.log(result);
+          if (result.status === 200) {
+            loadComputers();
+          }
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    }
+  }
+
+  useEffect(() => {
+    loadComputers();
+  }, []);
+
+  if (comps.length < 1) {
+    return <div>Keine Computer vorhanden</div>;
+  }
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <h2 className={"text-2xl mx-2 p-2 mb-2"}>
+        Registrierte Computer
+      </h2>
+      {comps.map((computer) => (
+        <div
+          key={computer.id}
+          className={
+            "relative border rounded border-blue-500 bg-blue-200 text-gray-600 mx-4 p-2 mb-2  sm:max-w-lg sm:mx-auto"
+          }
         >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+          <p className={"text-lg"}>
+            {computer.name} ({computer.mac})
+          </p>
+          <p className={"text-sm text-gray-400"}>
+            {computer.comment}
+          </p>
+          <span
+            className={
+              "absolute bottom-0 right-0 m-2 cursor-pointer p-0"
+            }
+            onClick={() => deleteComputer({
+              mac: computer.mac,
+              name: computer.name
+            })}
+          >X</span>
+        </div>
+      ))}
+    </>
+  );
 }
+
+export default Home;

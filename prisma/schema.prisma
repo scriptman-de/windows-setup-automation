@@ -1,0 +1,15 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = "file:../db.sqlite3"
+}
+
+model Computer {
+    name    String      @unique
+    id      Int         @default(autoincrement()) @id
+    mac     String      @unique
+    comment String?
+}
