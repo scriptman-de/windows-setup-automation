@@ -22,7 +22,7 @@ export default async function EnableSingle(req, res) {
       .send({ success: true, computer: newComputer });
   } catch (e) {
     if (e.code === "P2002") {
-      return res.status(400).send({
+      return res.send({
         success: false,
         message: `Client exists. See ${e.meta.target}`
       });
