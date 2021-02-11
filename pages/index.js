@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
 function Home() {
   const [comps, setComps] = useState([]);
@@ -9,7 +10,6 @@ function Home() {
       axios
         .get("/api/v1/enabled")
         .then((result) => {
-          console.log(result);
           if (result.status === 200) {
             setComps(result.data.computers);
           }
@@ -74,6 +74,9 @@ function Home() {
               name: computer.name
             })}
           >X</span>
+          <span className="absolute top-0 right-0 m-2 cursor-pointer p-0">
+            <Link href={`/edit/${computer.mac}`}>E</Link>
+          </span>
         </div>
       ))}
     </>
