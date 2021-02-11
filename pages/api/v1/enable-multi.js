@@ -1,5 +1,5 @@
-import {computerSchema} from '../../../../validation/schema';
-import prisma from '../../../../lib/prisma';
+import {computerSchema} from '../../../validation/schema';
+import prisma from '../../../lib/prisma';
 
 export default async function EnableMulti(req, res) {
   if (!req.method === 'POST') {

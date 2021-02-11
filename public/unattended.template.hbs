@@ -15,20 +15,32 @@
             <CEIPEnabled>0</CEIPEnabled>
         </component>
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <OEMInformation>
+                <SupportURL>https://www.landkreis-wuerzburg.de</SupportURL>
+                <SupportHours>9am - 5pm</SupportHours>
+            </OEMInformation>
+            <OEMName>Landkreis Würzburg</OEMName>
+            <RegisteredOrganization>Landratsamt Würzburg</RegisteredOrganization>
+            <RegisteredOwner>Landkreisschule</RegisteredOwner>
+            <TimeZone>W. Europe Standard Time</TimeZone>
             <ComputerName>{{COMPUTERNAME}}</ComputerName>
             <ProductKey>W269N-WFGWX-YVC9B-4J6C9-T83GX</ProductKey>
+        </component>
+        <component name="Microsoft-Windows-UnattendedJoin" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <Identification>
+                <JoinDomain>test.local</JoinDomain>
+                <UnsecureJoin>false</UnsecureJoin>
+                <MachineObjectOU>OU=Surface,DC=test,DC=local</MachineObjectOU>
+                <Credentials>
+                    <Domain>test.local</Domain>
+                    <Password>Unsecurep@55w0rd</Password>
+                    <Username>LRA-DJOIN</Username>
+                </Credentials>
+            </Identification>
         </component>
     </settings>
     <settings pass="oobeSystem">
         <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <AutoLogon>
-                <Password>
-                    <Value>Start2020!</Value>
-                    <PlainText>true</PlainText>
-                </Password>
-                <Enabled>true</Enabled>
-                <Username>Administrator</Username>
-            </AutoLogon>
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
                 <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
@@ -52,24 +64,14 @@
                         <Name>lraadmin</Name>
                     </LocalAccount>
                 </LocalAccounts>
+                <AdministratorPassword>
+                    <Value>RwB1AG0AYQBqAG8AbQBpADEAIQBBAGQAbQBpAG4AaQBzAHQAcgBhAHQAbwByAFAAYQBzAHMAdwBvAHIAZAA=</Value>
+                    <PlainText>false</PlainText>
+                </AdministratorPassword>
             </UserAccounts>
             <RegisteredOrganization>Landkreis Würzburg</RegisteredOrganization>
             <RegisteredOwner>Landkreisschule</RegisteredOwner>
             <DisableAutoDaylightTimeSet>false</DisableAutoDaylightTimeSet>
-            <FirstLogonCommands>
-                <SynchronousCommand wcm:action="add">
-                    <Description>Control Panel View</Description>
-                    <Order>1</Order>
-                    <CommandLine>reg add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel" /v StartupPage /t REG_DWORD /d 1 /f</CommandLine>
-                    <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>
-                <SynchronousCommand wcm:action="add">
-                    <Order>3</Order>
-                    <RequiresUserInput>false</RequiresUserInput>
-                    <CommandLine>cmd /C wmic useraccount where name="" set PasswordExpires=false</CommandLine>
-                    <Description>Password Never Expires</Description>
-                </SynchronousCommand>
-            </FirstLogonCommands>
             <TimeZone>W. Europe Standard Time</TimeZone>
         </component>
     </settings>

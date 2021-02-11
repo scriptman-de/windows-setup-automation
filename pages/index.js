@@ -2,6 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
+import {faPen, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+
 function Home() {
   const [comps, setComps] = useState([]);
 
@@ -26,9 +29,8 @@ function Home() {
   function deleteComputer({ name, mac }) {
     if (confirm(`${name} wirklich löschen?`)) {
       axios
-        .delete(`/api/v1/delete/${mac}`)
+        .delete(`/api/v1/${mac}/delete`)
         .then((result) => {
-          console.log(result);
           if (result.status === 200) {
             loadComputers();
           }
@@ -73,9 +75,9 @@ function Home() {
               mac: computer.mac,
               name: computer.name
             })}
-          >X</span>
+          ><a><FontAwesomeIcon icon={faTimes} /></a></span>
           <span className="absolute top-0 right-0 m-2 cursor-pointer p-0">
-            <Link href={`/edit/${computer.mac}`}>E</Link>
+            <Link href={`/edit/${computer.mac}`}><a><FontAwesomeIcon icon={faPen} /></a></Link>
           </span>
         </div>
       ))}

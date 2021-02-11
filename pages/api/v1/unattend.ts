@@ -7,9 +7,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "../../../lib/prisma";
 import initMiddleware from "../../../lib/init-middleware";
 
-const cors = initMiddleware(Cors({ methods: ["POST", "OPTIONS"], origin: "http://www.aulenbach.info"}));
+const cors = initMiddleware(Cors({ methods: ["POST", "OPTIONS"], origin: "*"}));
 
-export default async function GetConfig(
+export default async function Unattend(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

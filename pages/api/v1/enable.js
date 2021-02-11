@@ -1,4 +1,4 @@
-import prisma from "../../../../lib/prisma";
+import prisma from "../../../lib/prisma";
 
 export default async function EnableSingle(req, res) {
   if (req.method !== "POST") {
