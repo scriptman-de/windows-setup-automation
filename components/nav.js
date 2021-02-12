@@ -7,10 +7,10 @@ export default function Navigation() {
         "nav w-screen p-4 bg-blue-500 text-gray-100 shadow-md flex justify-between"
       }
     >
-      <h1 className={"p-2"}><Link href={"/"}>Windows Setup Automation</Link></h1>
+      <h1><Link href={"/"}>Windows Setup Automation</Link></h1>
       <ul>
-        <li className="p-2 rounded hover:bg-blue-200 hover:text-black">
-          <Link href={"/add"}>Neuer Computer</Link>
+        <li>
+          <Link href={"/add"}><a className="p-2 rounded hover:bg-blue-200 hover:text-black">Neuer Computer</a></Link>
         </li>
       </ul>
     </nav>
