@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 
 import {faPen, faTimes} from "@fortawesome/free-solid-svg-icons";
@@ -50,7 +50,7 @@ function Home() {
   }
 
   return (
-    <>
+    <Fragment>
       <h2 className={"text-2xl mx-2 p-2 mb-2"}>
         Registrierte Computer
       </h2>
@@ -81,7 +81,7 @@ function Home() {
           </span>
         </div>
       ))}
-    </>
+    </Fragment>
   );
 }
 
