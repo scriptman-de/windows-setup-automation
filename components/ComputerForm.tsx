@@ -25,7 +25,17 @@ export default function ComputerForm({computerInformation, submitFunction}) {
                     onBlur={handleBlur}
                     onChange={handleChange}
                 />
-                <ErrorMessage name="name"/>
+                <ErrorMessage name="name">
+                    {(msg) => (
+                        <div
+                            className={
+                                "text-white bg-red-600 border-1 border-red rounded p-1 mx-2 mb-2"
+                            }
+                        >
+                            Kein gültiger Name
+                        </div>
+                    )}
+                </ErrorMessage>
                 <input
                     type={"text"}
                     name={"mac"}
