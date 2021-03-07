@@ -1,8 +1,9 @@
 import React, { useState, Fragment } from "react";
 import PapaParse from "papaparse";
+import axios from "axios";
 
 export default function ImportCsv() {
-  const [csvParsed, setCsvParsed] = useState([]);
+  const [csvParsed, setCsvParsed] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleOnFileInputChange = (e) => {
@@ -33,8 +34,6 @@ export default function ImportCsv() {
           (item) => item.SERIALNUMBER !== "" && item.MAC !== ""
         );
 
-        console.log(csvData);
-
         setCsvParsed(csvData);
         setLoading(false);
       };
@@ -44,7 +43,54 @@ export default function ImportCsv() {
   };
 
   const executeImport = () => {
-    // noop
+    const computerArray = [];
+
+    for (let pcindex in csvParsed.data) {
+      const computer = csvParsed.data[pcindex];
+
+      if (computer.imported) continue;
+
+      computerArray.push({
+        serial: computer.BIOSSERIALNUMBER,
+        manufacturer: computer.CMPHERSTELLER,
+        model: computer.CMPMODELL,
+        mac: computer.MAC,
+        name: computer.NAME,
+      });
+    }
+
+    if (computerArray.length === 0) {
+      return;
+    }
+
+    axios
+      .post("/api/v1/enable-multi", { computers: computerArray })
+      .then((res) => {
+        let result = res.data;
+
+        if (result.success) {
+          alert("Alle Daten erfolgreich importiert!");
+
+          const computers = csvParsed.data.map((cmp) => {
+            return { ...cmp, imported: true };
+          });
+
+          setCsvParsed({ ...csvParsed, data: computers });
+        } else if (result.success === false) {
+          const _csvParsed = csvParsed;
+          for (let errcomp of result.computers) {
+            for (let i in _csvParsed.data) {
+              if (_csvParsed.data[i].BIOSSERIALNUMBER === errcomp.serial)
+                continue;
+
+              _csvParsed.data[i].imported = true;
+            }
+          }
+
+          setCsvParsed(_csvParsed);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -83,7 +129,10 @@ export default function ImportCsv() {
             </thead>
             <tbody>
               {csvParsed.data.map((row) => (
-                <tr key={row.MAC} className="border border-gray-800">
+                <tr
+                  key={row.BIOSSERIALNUMBER}
+                  className="border border-gray-800"
+                >
                   <td className="border border-gray-800">{row.NAME}</td>
                   <td className="border border-gray-800">{row.MAC}</td>
                   <td className="border border-gray-800">

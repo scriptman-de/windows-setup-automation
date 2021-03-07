@@ -13,15 +13,15 @@ export default async function ComputerInfo(req, res) {
   // GET
   if (req.method === "GET") {
     const {
-      query: { mac }
+      query: { serial },
     } = req;
 
-    const computer = await prisma.computer.findUnique({ where: { mac } });
+    const computer = await prisma.computer.findUnique({ where: { serial } });
 
     if (!computer) {
       return res
-      .status(404)
-      .end({ success: false, message: "no device found" });
+        .status(404)
+        .end({ success: false, message: "no device found" });
     }
 
     return res.send({ success: true, computer });
@@ -29,8 +29,7 @@ export default async function ComputerInfo(req, res) {
 
   // ====================================================
   // POST
-  if(req.method === "POST" || req.method === "PUT") {
-
+  if (req.method === "POST" || req.method === "PUT") {
   }
 
   // ====================================================
