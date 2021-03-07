@@ -18,12 +18,12 @@ export default async function Unattend(
   if (req.method !== "GET") return res.status(400).send("this is GET only");
 
   const {
-    query: { mac }
+    query: { serial }
   } = req;
 
   // load db content
   const computer = await prisma.computer.findUnique({
-    where: { mac: mac.toString() }
+    where: { serial: serial.toString() }
   });
 
   if (!computer) {
@@ -38,5 +38,6 @@ export default async function Unattend(
   const template = Handlebars.compile(templatefile);
   const unattendedXml = template({ COMPUTERNAME: computer.name });
 
+  res.setHeader("Content-Type", "application/xml");
   return res.send(unattendedXml);
 }

@@ -10,6 +10,9 @@ datasource db {
 model Computer {
     name    String      @unique
     id      Int         @default(autoincrement()) @id
-    mac     String      @unique
+    serial  String      @unique
+    model   String?
+    manufacturer String?
+    mac     String?
     comment String?
 }

@@ -6,12 +6,15 @@ export default async function EnableSingle(req, res) {
     return res.send({ success: false, message: "this is POST only" });
   }
 
-  const { name, mac, comment } = req.body;
+  const { name, serial, manufacturer, model, mac, comment } = req.body;
 
   try {
     const newComputer = await prisma.computer.create({
       data: {
         name: name.trim(),
+        serial: serial.trim(),
+        manufacturer: manufacturer.trim(),
+        model: model.trim(),
         mac: mac.trim(),
         comment: comment
       }

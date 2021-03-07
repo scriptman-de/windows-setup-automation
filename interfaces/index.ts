@@ -1,5 +1,8 @@
 export interface Computer {
     name: String;
-    mac: String;
+    serial: String;
+    manufacturer?: String;
+    model?: String;
+    mac?: String;
     comment?: String;
 }

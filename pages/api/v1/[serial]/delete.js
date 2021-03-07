@@ -5,22 +5,20 @@ export default async function DisableSetup(req, res) {
     res.statusCode = 400;
     return res.send({
       success: false,
-      message: "this is DELETE only"
+      message: "this is DELETE only",
     });
   }
 
   const {
-    query: { mac }
+    query: { serial },
   } = req;
 
   try {
     const computer = await prisma.computer.delete({
-      where: {
-        mac
-      }
+      where: { serial },
     });
 
-    return res.json({success:true, message: "Client deleted", computer});
+    return res.json({ success: true, message: "Client deleted", computer });
   } catch (e) {
     return res
       .status(400)

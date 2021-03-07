@@ -41,9 +41,9 @@ export default async function EnableMulti(req, res) {
   }
 
   if (_err.length > 0) {
-    return res.status(400).send({
+    return res.send({
       success: false,
-      message: 'Some entries are missing required fields',
+      message: "Some entries were not processed. check them.",
       computers: _err,
     });
   }
