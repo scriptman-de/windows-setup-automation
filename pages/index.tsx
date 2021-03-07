@@ -16,7 +16,7 @@ function Home() {
           }
           setLoading(false);
         })
-        .error((err) => {
+        .catch((err) => {
           setComps([]);
           setLoading(false);
           console.error(err.message);
