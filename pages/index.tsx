@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import React, { useState, useEffect, Fragment } from "react";
-import ComputersTable from "../components/ComputersTable";
+
+import ComputersTable from "components/ComputersTable";
+import { HttpResponseComputerDeleteMany } from "interfaces"
 
 function Home() {
   const [loading, setLoading] = useState(false);
@@ -54,16 +56,16 @@ function Home() {
    */
   async function multiDeleteComputer(computerSerial: string[]) {
     try {
-      const res: AxiosResponse = await axios.post("/api/v1/delete", {
+      const res: AxiosResponse<HttpResponseComputerDeleteMany> = await axios.post("/api/v1/delete", {
         computers: computerSerial,
       });
 
-      if (res.status === 200) {
-        alert(`Es wurden ${res.data.count} Computer gelöscht!`);
+      if (res.status === 200 && res.data.success) {
+        alert(`Es wurden ${res.data.deleted.length} Computer gelöscht!`);
         setLoading(true);
         loadComputers();
       } else {
-        alert(res.data.message);
+        alert(`Es sind fehler bei folgenden Computern aufgetreten\n${res.data.errors.join(",")}`);
       }
     } catch (_err) {
       alert(_err.message);

@@ -24,7 +24,7 @@ export default function AddComputer() {
         <h2 className={'text-2xl mx-2 p-2 mb-2'}>
           Neuen Computer hinzufügen
         </h2>
-        <ComputerForm computerInformation={{name: '', mac: '', comment: ''}}
+        <ComputerForm computerInformation={{name: '', mac: '', serial: '', uuid: '', comment: ''}}
                       submitFunction={createComputer}/>
       </div>
   );

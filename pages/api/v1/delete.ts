@@ -1,16 +1,17 @@
 import Cors from "cors";
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
+import { HttpResponseComputerDeleteMany, HttpResponseComputerDeleteManyError} from "interfaces";
 
-import prisma from "../../../lib/prisma";
-import initMiddleware from "../../../lib/init-middleware";
+import prisma from "lib/prisma";
+import initMiddleware from "lib/init-middleware";
 
 const cors = initMiddleware(
   Cors({ methods: ["DELETE", "OPTIONS"], origin: "*" })
 );
 
-export default async function Unattend(
+export default async function DeleteComputer(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<HttpResponseComputerDeleteMany|HttpResponseComputerDeleteManyError>
 ) {
   await cors(req, res);
 
@@ -18,23 +19,30 @@ export default async function Unattend(
     body: { computers },
   } = req;
 
-  const _err = [];
+  const _err = [],
+    _deleted = [];
 
   for (const computer of computers) {
     try {
-      const deletedCount = await prisma.computer.deleteMany({
+      await prisma.computer.delete({
         where: {
-          serial: {
-            in: computers,
-          },
+          serial: computer,
         },
       });
 
-      return res.send({ success: true, ...deletedCount });
+      _deleted.push(computer);
     } catch (e) {
       _err.push({ computer, message: e.message });
     }
   }
 
-  return res.status(500).send({ success: false });
+  if (_deleted.length > 0) {
+    return res.json({
+      success: true,
+      deleted: _deleted,
+      errors: _err,
+    });
+  }
+
+  return res.status(500).send({ success: false, message: `Allgemeiner Fehler` });
 }

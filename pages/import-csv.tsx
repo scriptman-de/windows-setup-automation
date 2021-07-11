@@ -1,9 +1,9 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import PapaParse from "papaparse";
 import axios from "axios";
 
 export default function ImportCsv() {
-  const [csvParsed, setCsvParsed] = useState({});
+  const [csvParsed, setCsvParsed] = useState<any>({});
   const [loading, setLoading] = useState(false);
 
   const handleOnFileInputChange = (e) => {
@@ -31,7 +31,7 @@ export default function ImportCsv() {
         }
 
         csvData.data = csvData.data.filter(
-          (item) => item.SERIALNUMBER !== "" && item.MAC !== ""
+          (item) => (item.SERIALNUMBER !== "" || item.UUID !== "") && item.MAC !== ""
         );
 
         setCsvParsed(csvData);
@@ -51,11 +51,12 @@ export default function ImportCsv() {
       if (computer.imported) continue;
 
       computerArray.push({
+        name: computer.NAME,
         serial: computer.BIOSSERIALNUMBER,
+        uuid: computer.UUID,
         manufacturer: computer.CMPHERSTELLER,
         model: computer.CMPMODELL,
         mac: computer.MAC,
-        name: computer.NAME,
       });
     }
 
@@ -112,11 +113,11 @@ export default function ImportCsv() {
       </div>
       <div className="overflow-x-scroll">
         {!csvParsed.data ? (
-          <p className="text-red-900">
+          <p className="text-red-900 my-2">
             Bitte Datei zum einlesen auswählen&hellip;
           </p>
         ) : (
-          <table className="table-auto border border-gray-800">
+          <table className="table-auto border border-gray-800 my-2">
             <thead>
               <tr>
                 {csvParsed.meta.fields.map((field) => (
@@ -128,29 +129,38 @@ export default function ImportCsv() {
               </tr>
             </thead>
             <tbody>
-              {csvParsed.data.map((row) => (
-                <tr
-                  key={row.BIOSSERIALNUMBER}
-                  className="border border-gray-800"
-                >
-                  <td className="border border-gray-800">{row.NAME}</td>
-                  <td className="border border-gray-800">{row.MAC}</td>
-                  <td className="border border-gray-800">
-                    {row.BIOSSERIALNUMBER}
-                  </td>
-                  <td className="border border-gray-800">
-                    {row.CMPHERSTELLER}
-                  </td>
-                  <td className="border border-gray-800">{row.CMPMODELL}</td>
-                  <td className="border border-gray-800">
-                    {row.imported ? "JA" : "NEIN"}
-                  </td>
-                </tr>
-              ))}
+              {csvParsed.data.map((row) => {
+                let keys = Object.keys(row);
+                const parsedRow = keys.map(i => parseRow(row, i))
+
+                return (
+                    <tr
+                        key={row.BIOSSERIALNUMBER}
+                        className="border border-gray-800"
+                    >
+                      {parsedRow}
+                    </tr>
+                )
+              })}
             </tbody>
           </table>
         )}
       </div>
     </div>
   );
+}
+
+/**
+ *
+ * @param row dataset from importfile (variable length)
+ * @param i current name of the row
+ */
+function parseRow(row, i) {
+  if (i == "imported") {
+    return <td className="border border-gray-800">
+      {row.imported ? "JA" : "NEIN"}
+    </td>
+  }
+
+  return <td className="border border-gray-800">{row[i]}</td>
 }

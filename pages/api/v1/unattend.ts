@@ -4,8 +4,8 @@ import fs from "fs";
 import path from "path";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import prisma from "../../../lib/prisma";
-import initMiddleware from "../../../lib/init-middleware";
+import prisma from "lib/prisma";
+import initMiddleware from "lib/init-middleware";
 
 const cors = initMiddleware(Cors({ methods: ["POST", "OPTIONS"], origin: "*"}));
 
@@ -15,16 +15,26 @@ export default async function Unattend(
 ) {
   await cors(req, res);
 
+  let computer;
+
   if (req.method !== "GET") return res.status(400).send("this is GET only");
 
   const {
-    query: { serial }
+    query: { serial, uuid }
   } = req;
 
   // load db content
-  const computer = await prisma.computer.findUnique({
-    where: { serial: serial.toString() }
-  });
+  if(uuid) {
+    computer = await prisma.computer.findUnique({
+      where: { uuid: uuid.toString() }
+    });
+  }
+
+  if(serial) {
+    computer = await prisma.computer.findUnique({
+      where: { serial: serial.toString() }
+    });
+  }
 
   if (!computer) {
     return res.status(404).end();

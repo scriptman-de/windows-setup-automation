@@ -1,12 +1,12 @@
-import React, { useState, useEffect, ChangeEvent, Fragment } from "react";
+import { useState, useEffect, ChangeEvent, Fragment } from "react";
 import Link from "next/link";
 
 import { faPen, faTimes, faFileCode } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import Checkbox from "../components/Checkbox";
-import { IComputersTable, IComputer } from "../interfaces";
-import { exec } from "child_process";
+import Checkbox from "components/Checkbox";
+import { IComputersTable } from "interfaces";
+import { Computer } from "@prisma/client";
 
 const ComputersTable = ({
   computers,
@@ -29,7 +29,7 @@ const ComputersTable = ({
     getIsChecked();
   }, [computers]);
 
-  function handleChecked(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChecked(e: ChangeEvent<HTMLInputElement>) {
     const { name } = e.target;
 
     let serial = name.replace("check-", "");
@@ -49,7 +49,7 @@ const ComputersTable = ({
     deleteMultiple(_toDelete);
   }
 
-  const tableEntries = computers.map((computer: IComputer) => (
+  const tableEntries = computers.map((computer: Computer) => (
     <tr key={computer.serial}>
       <td className="border border-black px-1">
         <Checkbox
@@ -60,6 +60,7 @@ const ComputersTable = ({
       </td>
       <td className="border border-black px-1">{computer.name}</td>
       <td className="border border-black px-1">{computer.serial}</td>
+      <td className="border border-black px-1">{computer.uuid || "n/a"}</td>
       <td className="border border-black px-1">{computer.manufacturer}</td>
       <td className="border border-black px-1">{computer.model}</td>
       <td className="border border-black px-1">{computer.mac}</td>
@@ -111,6 +112,7 @@ const ComputersTable = ({
             <th className="border border-black px-1 bg-blue-300">C</th>
             <th className="border border-black px-1 bg-blue-300">Name</th>
             <th className="border border-black px-1 bg-blue-300">Seriennr.</th>
+            <th className="border border-black px-1 bg-blue-300">UUID</th>
             <th className="border border-black px-1 bg-blue-300">Hersteller</th>
             <th className="border border-black px-1 bg-blue-300">Modell</th>
             <th className="border border-black px-1 bg-blue-300">MAC</th>
