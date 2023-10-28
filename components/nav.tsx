@@ -13,16 +13,16 @@ export default function Navigation() {
       <ul className="flex flex-row">
         <li>
           <Link href={"/add"}>
-            <a className="p-2 rounded hover:bg-blue-200 hover:text-black">
+            <span className="p-2 rounded hover:bg-blue-200 hover:text-black">
               Neuer Computer
-            </a>
+            </span>
           </Link>
         </li>
         <li>
           <Link href={"/import-csv"}>
-            <a className="p-2 rounded hover:bg-blue-200 hover:text-black">
+            <span className="p-2 rounded hover:bg-blue-200 hover:text-black">
               Import
-            </a>
+            </span>
           </Link>
         </li>
       </ul>

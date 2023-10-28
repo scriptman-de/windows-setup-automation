@@ -2,7 +2,7 @@ import {Computer} from "@prisma/client";
 
 export interface IComputersTable {
   computers: Computer[];
-  deleteComputer: ({ name, serial: string }) => void;
+  deleteComputer: ({ name, serial } : { name: string, serial: string}) => void;
   deleteMultiple: (computerSerial: string[]) => void;
 }
 

@@ -12,7 +12,7 @@ export const computerSchema = Yup.object().shape({
     then: Yup.string().uuid().required("UUID darf nicht leer sein"),
     otherwise: Yup.string().uuid()
   }),
-  manufacturer: Yup.string().min(3),
+  manufacturer: Yup.string().required(),
   model: Yup.string().min(3),
   mac: Yup.string()
   .matches("[0-9a-fA-F]{2}([-:]?)[0-9a-fA-F]{2}(\\1[0-9a-fA-F]{2}){4}$"),

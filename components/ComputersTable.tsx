@@ -68,9 +68,7 @@ const ComputersTable = ({
       <td className="border border-black px-1">
         <span className="cursor-pointer px-1">
           <Link href={`/edit/${computer.serial}`}>
-            <a>
               <FontAwesomeIcon icon={faPen} />
-            </a>
           </Link>
         </span>
         <span
@@ -82,17 +80,15 @@ const ComputersTable = ({
             })
           }
         >
-          <a>
             <FontAwesomeIcon icon={faTimes} />
-          </a>
         </span>
         <span className="cursor-pointer px-1">
-          <a
+          <Link
             href={`/api/v1/unattend?serial=${computer.serial}`}
             target="_blank"
           >
             <FontAwesomeIcon icon={faFileCode} />
-          </a>
+          </Link>
         </span>
       </td>
     </tr>
